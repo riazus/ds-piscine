@@ -1,2 +1,0 @@
-docker run --name db -e POSTGRES_PASSWORD=mysecretpassword -e POSTGRES_USER=jannabel -e POSTGRES_DB=piscineds -d postgres
-docker exec -it db psql -U jannabel -d piscineds -h localhost -W

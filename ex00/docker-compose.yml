@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  postgres:
+    container_name: db
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: jannabel
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: piscineds
+    ports:
+      - 5432:5432
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - day-00
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:latest
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: jannabel@student.42.fr
+      PGADMIN_DEFAULT_PASSWORD: qweqwe
+    ports:
+      - 8080:80
+    depends_on:
+      - postgres
+    networks:
+      - day-00
+
+networks:
+  day-00:
+    driver: bridge
