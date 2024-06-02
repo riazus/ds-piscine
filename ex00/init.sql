@@ -36,3 +36,12 @@ CREATE TABLE public.data_2023_jan (
     user_id INTEGER,
     user_session UUID
 );
+
+CREATE TABLE public.items
+(
+    product_id integer NOT NULL,
+    category_id text NOT NULL,
+    category_code text,
+    brand text NOT NULL,
+    PRIMARY KEY (product_id)
+);
