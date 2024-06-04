@@ -15,7 +15,7 @@ def main():
     df_list = [pd.read_csv(file) for file in csv_file_paths]
     combined_df = pd.concat(df_list, ignore_index=True)
 
-    conn_string = "postgresql+psycopg2://:jannabel@localhost:5432/piscineds"
+    conn_string = "postgresql+psycopg2://jannabel:mysecretpassword@localhost:5432/piscineds"
     engine = create_engine(conn_string)
 
     # Connect to the database to create ENUM type
