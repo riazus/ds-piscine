@@ -1,12 +1,22 @@
+import os
 import pandas as pd
-from sqlalchemy import create_engine, Table, Column, Integer, MetaData, Text, BigInteger
+from dotenv import load_dotenv
+from sqlalchemy import create_engine, Table, Column, Integer, \
+    MetaData, Text, BigInteger
 
 
 def main():
     """Driver main function"""
     df_list = pd.read_csv("../subject/item/item.csv")
 
-    conn_string = "postgresql+psycopg2://jannabel:mysecretpassword@localhost:5432/piscineds"
+    load_dotenv("../.env")
+
+    pg_user = os.getenv('POSTGRES_USER')
+    pg_pass = os.getenv('POSTGRES_PASSWORD')
+    pg_db = os.getenv('POSTGRES_DB')
+
+    conn_string = f"postgresql+psycopg2://{pg_user}:{pg_pass}\
+        @localhost:5432/{pg_db}"
     engine = create_engine(conn_string)
 
     metadata = MetaData()
@@ -16,13 +26,11 @@ def main():
           Column('category_code', Text),
           Column('brand', Text))
 
-    # Create table in PostgreSQL if it does not exist
     metadata.create_all(engine)
+    print("Table items successfully created")
 
-    # Write data to PostgreSQL
     df_list.to_sql('items', engine, if_exists='append', index=False)
-
-    print("Data from all CSV files has been successfully written")
+    print("Data successfully writed to items table")
 
 
 if __name__ == '__main__':

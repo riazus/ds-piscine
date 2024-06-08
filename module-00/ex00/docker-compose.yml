@@ -6,30 +6,32 @@ services:
     image: postgres:latest
     restart: always
     environment:
-      POSTGRES_USER: jannabel
-      POSTGRES_PASSWORD: mysecretpassword
-      POSTGRES_DB: piscineds
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     ports:
       - 5432:5432
-    volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
-      - day-00
+      - ds
+    env_file:
+      - ../.env
 
   pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4:latest
     restart: always
     environment:
-      PGADMIN_DEFAULT_EMAIL: jannabel@student.42.fr
-      PGADMIN_DEFAULT_PASSWORD: qweqwe
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
     ports:
       - 8080:80
     depends_on:
       - postgres
     networks:
-      - day-00
+      - ds
+    env_file:
+      - ../.env
 
 networks:
-  day-00:
+  ds:
     driver: bridge

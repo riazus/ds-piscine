@@ -1,45 +1,34 @@
 import os
-import enum
 import pandas as pd
 from sqlalchemy import create_engine
-
-
-class event_type_enum(enum.Enum):
-    """Enum for event types"""
-    view = 'view'
-    cart = 'cart'
-    purchase = 'purchase'
-    remove_from_cart = 'remove_from_cart'
-
-
-def get_db_engine():
-    """Return a PostgreSQL database engine"""
-    return create_engine('postgresql://{}:{}@{}/{}'.format(
-        'jannabel', 'mysecretpassword', 'localhost:5432', 'piscineds'))
-
-
-def csv_to_postgres(engine, csv_file_path, table_name):
-    """Write data from a CSV file to a PostgreSQL table"""
-    data = pd.read_csv(csv_file_path)
-    data.to_sql(table_name, engine, if_exists='append', index=False)
-
-    print(f"Data from {csv_file_path} has been written to {table_name}")
+from dotenv import load_dotenv
 
 
 def main():
     """Driver main function"""
-    folder_path = "../subject/customer"
-    engine = get_db_engine().connect()
+    load_dotenv("../.env")
 
-    for filename in os.listdir(folder_path):
-        if not filename.endswith(".csv"):
-            continue
+    pg_user = os.getenv('POSTGRES_USER')
+    pg_pass = os.getenv('POSTGRES_PASSWORD')
+    pg_db = os.getenv('POSTGRES_DB')
 
-        table_name = filename.split(".")[0]
-        csv_file_path = os.path.join(folder_path, filename)
-        csv_to_postgres(engine, csv_file_path, table_name)
+    conn_string = f"postgresql+psycopg2://{pg_user}:{pg_pass}\
+        @localhost:5432/{pg_db}"
+    engine = create_engine(conn_string)
 
-    engine.close()
+    csv_paths = [
+        '../subject/customer/data_2022_oct.csv',
+        '../subject/customer/data_2022_nov.csv',
+        '../subject/customer/data_2022_dec.csv',
+        '../subject/customer/data_2023_jan.csv',
+    ]
+
+    for path in csv_paths:
+        data = pd.read_csv(path)
+        file_name_with_extension = path.split('/')[-1]
+        table_name = file_name_with_extension.split('.')[0]
+        data.to_sql(table_name, engine, if_exists='append', index=False)
+        print(f"Data from {path} has been written to {table_name}")
 
 
 if __name__ == '__main__':
