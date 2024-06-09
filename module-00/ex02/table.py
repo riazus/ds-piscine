@@ -13,8 +13,7 @@ def main():
     pg_pass = os.getenv('POSTGRES_PASSWORD')
     pg_db = os.getenv('POSTGRES_DB')
 
-    conn_string = f"postgresql+psycopg2://{pg_user}:{pg_pass}\
-        @localhost:5432/{pg_db}"
+    conn_string = f"postgresql+psycopg2://{pg_user}:{pg_pass}@localhost:5432/{pg_db}"
     engine = create_engine(conn_string)
 
     table_names = [
