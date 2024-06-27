@@ -1,10 +1,18 @@
+import os
 import pandas as pd
 from sqlalchemy import create_engine, Table, Column, Integer, String, Float, MetaData, DateTime
 from sqlalchemy.dialects.postgresql import ENUM
+from dotenv import load_dotenv
 
 
 def main():
     """Driver main function"""
+    load_dotenv("../.env")
+
+    pg_user = os.getenv('POSTGRES_USER')
+    pg_pass = os.getenv('POSTGRES_PASSWORD')
+    pg_db = os.getenv('POSTGRES_DB')
+
     csv_file_paths = [
         '../../module-00/subject/customer/data_2022_oct.csv',
         '../../module-00/subject/customer/data_2022_nov.csv',
@@ -15,12 +23,8 @@ def main():
     df_list = [pd.read_csv(file) for file in csv_file_paths]
     combined_df = pd.concat(df_list, ignore_index=True)
 
-    conn_string = "postgresql+psycopg2://jannabel:mysecretpassword@localhost:5432/piscineds"
+    conn_string = f"postgresql+psycopg2://{pg_user}:{pg_pass}@localhost:5432/{pg_db}"
     engine = create_engine(conn_string)
-
-    # Connect to the database to create ENUM type
-    # with engine.connect() as conn:
-    #     conn.execute("DO $$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'event_type_enum') THEN CREATE TYPE event_type_enum AS ENUM ('remove_from_cart', 'view', 'cart', 'purchase'); END IF; END $$;")
 
     metadata = MetaData()
     Table('customers', metadata,

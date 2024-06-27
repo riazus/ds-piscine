@@ -1,8 +1,8 @@
 import os
 from dotenv import load_dotenv
+from sqlalchemy import create_engine
 import pandas as pd
 import matplotlib.pyplot as plt
-from sqlalchemy import create_engine
 from sklearn.cluster import KMeans
 
 
