@@ -14,10 +14,11 @@ def main():
     pg_db = os.getenv('POSTGRES_DB')
 
     csv_file_paths = [
-        '../../module-00/subject/customer/data_2022_oct.csv',
-        '../../module-00/subject/customer/data_2022_nov.csv',
-        '../../module-00/subject/customer/data_2022_dec.csv',
-        '../../module-00/subject/customer/data_2023_jan.csv'
+        '../data_2022_oct.csv',
+        '../data_2022_nov.csv',
+        '../data_2022_dec.csv',
+        '../data_2023_jan.csv',
+        '../data_2023_feb.csv',
     ]
 
     df_list = [pd.read_csv(file) for file in csv_file_paths]
