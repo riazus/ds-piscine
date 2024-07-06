@@ -7,6 +7,8 @@ ALTER TABLE IF EXISTS public.customers
 ALTER TABLE IF EXISTS public.customers
     ADD COLUMN brand text;
 
+DELETE FROM items WHERE category_id IS NULL;
+
 UPDATE customers AS cus
 SET
     category_id = it.category_id,
