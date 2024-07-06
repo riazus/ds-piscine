@@ -28,7 +28,6 @@ def main():
     plt.ylabel('Cumulative Variance (%)')
     plt.grid(True)
     plt.show()
-    plt.savefig("variances.jpg", bbox_inches='tight', pad_inches=0, dpi=500)
 
 
 if __name__ == "__main__":
